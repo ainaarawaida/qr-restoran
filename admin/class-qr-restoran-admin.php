@@ -286,7 +286,7 @@ class Qr_Restoran_Admin {
 				'0'=> $val->post_title, 
 				'1'=> $val->post_content, 
 				'2'=> $val->post_status, 
-				'3'=> '<i dataid="'.$val->ID.'" style="cursor: pointer;" id="datadelete" class="bi bi-trash-fill"></i> <i dataid="'.$val->post_title.'" data-toggle="modal" data-target="#qrgenerate" id="dataqr" style="cursor: pointer;" class="bi bi-qr-code-scan"></i>');
+				'3'=> '<a href="'.admin_url( 'admin.php?page=luq_qrr-lib-manage-generate-qr-code&no_meja='.$val->post_title ).'"><i class="bi bi-pencil-square"></i></a> <i dataid="'.$val->ID.'" style="cursor: pointer;" id="datadelete" class="bi bi-trash-fill"></i> <i dataid="'.$val->post_title.'" data-toggle="modal" data-target="#qrgenerate" id="dataqr" style="cursor: pointer;" class="bi bi-qr-code-scan"></i>');
 		}
 
 		// deb($data);exit();

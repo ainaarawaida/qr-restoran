@@ -13,7 +13,7 @@
             <i class="fa fa-address-card"></i>
           </div>
         </div> 
-        <input id="no_meja" name="no_meja" type="number" required="required" class="form-control">
+        <input id="no_meja" name="no_meja" value="<?php echo isset($_GET['no_meja']) ? $_GET['no_meja'] : '' ; ?>" type="number" required="required" class="form-control">
       </div>
     </div>
   </div> 

@@ -1,17 +1,14 @@
 
-<link rel="stylesheet" href="<?php echo plugins_url().'/qr-restoran/public/css/bootstrap.min.css' ; ?>"> 
-<!-- <link rel="stylesheet" href="<?php echo plugins_url().'/qr-restoran/public/css/font-awesome.min.css' ; ?>">  -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.0.0/css/font-awesome.min.css" />
 
 <?php
 global $wpdb ; 
 
-$getdata = $wpdb->get_results( "SELECT post_content
-FROM $wpdb->posts
-WHERE post_type = 'whatsapp-data'"
+$getdata = $wpdb->get_results( "SELECT option_value
+FROM $wpdb->options
+WHERE option_name = 'whatsapp-data'"
 );
 if($getdata){
-  $mygetdata = unserialize($getdata[0]->post_content) ;
+  $mygetdata = unserialize($getdata[0]->option_value) ;
 }
 
 
@@ -91,7 +88,7 @@ if($getdata){
     </div>
   </div>
 </form>
-</div>
+
 
 
 <?php
@@ -114,6 +111,12 @@ if(isset($_POST['luqwasapphone'])){
       $mengaji_id = $wpdb->insert_id;
   }
 
-  echo "<h3>Successful Save</h3>" ;
+  ?>
+      <div class="alert alert-success alert-dismissible fade show">
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        <strong>Success Configure Whatsapp</strong> New Configuration save.
+      </div>
+</div>
+  <?php
 
 }

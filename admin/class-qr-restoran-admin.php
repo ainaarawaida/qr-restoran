@@ -73,10 +73,20 @@ class Qr_Restoran_Admin {
 		 * class.
 		 */
 		$screen = get_current_screen();
+		// deb($screen);exit();
 		if($screen && $screen->id === 'restoran-management_page_luq_qrr-lib-table-lists'){
 			wp_enqueue_style( $this->plugin_name, 'https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/css/bootstrap.css', array(), $this->version, 'all' );
 			wp_enqueue_style( $this->plugin_name, 'https://cdn.datatables.net/1.11.3/css/dataTables.bootstrap4.min.css', array(), $this->version, 'all' );
 
+			?>
+				<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
+			<?php
+
+		}elseif($screen && ($screen->id === 'restoran-management_page_luq_qrr-lib-manage-generate-qr-code' || $screen->id === 'restoran-management_page_luq_qrr-lib-manage-whatsapp')){
+			?>
+			<link rel="stylesheet" href="<?php echo plugins_url().'/qr-restoran/public/css/bootstrap.min.css' ; ?>"> 
+			<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css" />
+			<?php
 		}
 		wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/qr-restoran-admin.css', array(), $this->version, 'all' );
 
@@ -107,6 +117,7 @@ class Qr_Restoran_Admin {
 			<script src="https://code.jquery.com/jquery-3.5.1.js" ></script>
 			<script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js" ></script>
 			<script src="https://cdn.datatables.net/1.11.3/js/dataTables.bootstrap4.min.js" ></script>
+			<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" ></script>
 			 <?php
 		 }
 		wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/qr-restoran-admin.js', array( 'jquery' ), $this->version, false );
@@ -147,7 +158,8 @@ class Qr_Restoran_Admin {
 				#footer-upgrade,
 				#activity-panel-tab-inbox,
 				#activity-panel-tab-setup,
-				#contextual-help-link-wrap {
+				#contextual-help-link-wrap,
+				div#wpbody-content div.update-nag.notice.notice-warning.inline {
 					display:none;
 				}
 			</style>
@@ -172,11 +184,16 @@ class Qr_Restoran_Admin {
 		add_submenu_page("luq_qrr-lib-manage", "Table Lists", "Table Lists", "manage_options", "luq_qrr-lib-table-lists", array($this, "luq_qrr_table_lists"));
 		add_submenu_page("luq_qrr-lib-manage", "Product Lists", "Product Lists", "manage_options", "edit.php?post_type=product");
 		add_submenu_page("luq_qrr-lib-manage", "Orders", "Orders", "manage_options", "edit.php?post_type=shop_order");
+		add_submenu_page("luq_qrr-lib-manage", "Test", "Test", "manage_options", "luq_qrr-lib-manage-test", array($this, "luq_qrr_manage_test"));
 		
 		add_menu_page("Dashboard Order ", "Dashboard Order", "manage_options", home_url('order-dashboard') , "" , "dashicons-welcome-write-blog", 58);
         
 		http://restoran.test/order-dashboard/
 
+	}
+
+	public function luq_qrr_manage_test(){
+		$this->luq_qrr_include_template_file("manage_test");
 	}
 
 	public function luq_qrr_table_lists(){
@@ -259,18 +276,20 @@ class Qr_Restoran_Admin {
 
 	public function luq_qrr_tablelist_process(){
 		global $wpdb ; 
-		$getdata = $wpdb->get_results( "SELECT post_title, post_content, post_status
+		$getdata = $wpdb->get_results( "SELECT ID, post_title, post_content, post_status
 		FROM $wpdb->posts
 		WHERE post_type = 'no_meja'"
 		);
-
+		$data = array() ; 
 		foreach($getdata AS $key => $val){
 			$data[] = array(
 				'0'=> $val->post_title, 
 				'1'=> $val->post_content, 
 				'2'=> $val->post_status, 
-				'3'=> '');
+				'3'=> '<i dataid="'.$val->ID.'" style="cursor: pointer;" id="datadelete" class="bi bi-trash-fill"></i> <i dataid="'.$val->post_title.'" data-toggle="modal" data-target="#qrgenerate" id="dataqr" style="cursor: pointer;" class="bi bi-qr-code-scan"></i>');
 		}
+
+		// deb($data);exit();
 
 		$json_data = array(
 			"draw"            => 100,   

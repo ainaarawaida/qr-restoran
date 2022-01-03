@@ -1,7 +1,5 @@
 
-<link rel="stylesheet" href="<?php echo plugins_url().'/qr-restoran/public/css/bootstrap.min.css' ; ?>"> 
-<!-- <link rel="stylesheet" href="<?php echo plugins_url().'/qr-restoran/public/css/font-awesome.min.css' ; ?>">  -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.0.0/css/font-awesome.min.css" />
+
 
 <h1>Generate QR Code</h1>
 <div style="padding:2%">
@@ -33,7 +31,7 @@
     </div>
   </div>
 </form>
-</div>
+
 
 
 <?php
@@ -59,29 +57,37 @@ if(isset($_POST['no_meja'])){
   if ($result === FALSE || $result < 1) {
       $wpdb->insert($tableName, $data_update);
       $meja_id = $wpdb->insert_id;
+      ?>
+      <div class="alert alert-success alert-dismissible fade show">
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        <strong>Success Insert New!</strong> New Table Inserted.
+      </div>
+      <?php
+    
+  }else{
+    ?>
+    <div class="alert alert-success alert-dismissible fade show">
+      <button type="button" class="close" data-dismiss="alert">&times;</button>
+      <strong>Success Updated!</strong> Table Updated.
+    </div>
+    <?php
   }
 
-  echo "<h3>Successful Save</h3>" ;
-
-
-    echo "<div style='padding:2%'><input type='button' id='btn' value='Print' onclick='printDiv();'><div id='myqrcode'><h1>Meja No:". $_POST['no_meja']."</h1>" ; 
-    //print_r($link_url);
-    echo '<img src="https://chart.googleapis.com/chart?chs=300x300&cht=qr&chl='.$link_url.'%2F&choe=UTF-8" alt="QR Code" width="300" height="300"></div></div>' ;
     ?>
-    <div style='padding:2%'>
-    
-    </div>
-            <!-- luqman koperasi certificate -->
-            <br><br>
-            <div id="mycard" >
-        <!-- content that wan t to print -->
-        <style>
+      <div style='padding:2%'>
+      <style>
         * {
             -webkit-print-color-adjust: exact !important;   /* Chrome, Safari, Edge */
             color-adjust: exact !important;                 /*Firefox*/
         }
         </style>
-        </div>
+      <input type='button' id='btn' value='Print' onclick='printDiv();'><div id='myqrcode'>
+    <?php
+    echo "<h1>Meja No:". $_POST['no_meja']."</h1>" ; 
+    //print_r($link_url);
+    echo '<img src="https://chart.googleapis.com/chart?chs=300x300&cht=qr&chl='.$link_url.'%2F&choe=UTF-8" alt="QR Code" width="300" height="300"></div></div>' ;
+    ?>
+          
         <script>
         function printDiv()
         {
@@ -102,7 +108,9 @@ if(isset($_POST['no_meja'])){
         
         }
         </script>
+</div>
     <?php
+
 
 
 }
